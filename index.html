@@ -57,7 +57,129 @@
     .product-info h4 {
       margin-bottom: 5px;
     }
-    .product-info p
+    .product-info p {
+      color: #555;
+    }
+    #login, #logout {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 999;
+    }
+    #logout {
+      top: 50px;
+      background: #dc3545;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="login">Iniciar sesión</button>
+  <button id="logout" style="display:none">Cerrar sesión</button>
+
+  <div class="carousel-container">
+    <div class="carousel-images" id="carousel">
+      <img src="imagenes/1.jpg" alt="Imagen 1">
+      <img src="imagenes/11.jpg" alt="Imagen 2">
+      <img src="imagenes/111.jpg" alt="Imagen 3">
+      <img src="imagenes/1111.jpg" alt="Imagen 4">
+    </div>
+  </div>
+
+  <div class="catalog-container">
+    <div class="catalog-title">Tienda Online</div>
+
+    <div class="product">
+      <img src="imagenes/5.jpg" alt="Producto 1">
+      <div class="product-info">
+        <h4>Laptop Lenovo IdeaPad Slim 3...</h4>
+        <p>$379.95</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="imagenes/6.jpg" alt="Producto 2">
+      <div class="product-info">
+        <h4>Laptop HP 15-fc0026la...</h4>
+        <p>$379.95</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="imagenes/7.jpg" alt="Producto 3">
+      <div class="product-info">
+        <h4>MacBook Air Retina 13.6"... </h4>
+        <p>$1,299.00</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="imagenes/8.jpg" alt="Producto 4">
+      <div class="product-info">
+        <h4>Victus Gaming Laptop 15-fb0142la...</h4>
+        <p>$929.95</p>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="imagenes/9.jpg" alt="Producto 5">
+      <div class="product-info">
+        <h4>Laptop Dell Inspiron 15 3530...</h4>
+        <p>$799.95</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('carousel');
+    let index = 0;
+    setInterval(() => {
+      index = (index + 1) % carousel.children.length;
+      carousel.style.transform = `translateX(-${index * 100}%)`;
+    }, 3000);
+
+    const auth0ClientPromise = createAuth0Client({
+      domain: "TU_DOMINIO.auth0.com",
+      client_id: "TU_CLIENT_ID",
+      redirect_uri: "https://elecpa.netlify.app/"
+    });
+
+    window.onload = async () => {
+      const auth0 = await auth0ClientPromise;
+
+      if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+        await auth0.handleRedirectCallback();
+        window.history.replaceState({}, document.title, "/");
+      }
+
+      const isAuthenticated = await auth0.isAuthenticated();
+
+      if (isAuthenticated) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("logout").style.display = "block";
+      } else {
+        document.getElementById("login").style.display = "block";
+        document.getElementById("logout").style.display = "none";
+      }
+
+      document.getElementById("login").addEventListener("click", () => {
+        auth0.loginWithRedirect();
+      });
+
+      document.getElementById("logout").addEventListener("click", () => {
+        auth0.logout({ returnTo: "https://elecpa.netlify.app/" });
+      });
+    };
+  </script>
+
+</body>
+</html>
 
 
 

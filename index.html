@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Romecomputer</title>
 
-  <!-- SDK de Auth0 -->
+  <!-- Auth0 -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
 
   <style>
@@ -17,34 +17,44 @@
 
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
       background-color: #f5f5f5;
     }
 
+    .auth-buttons {
+      margin: 15px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      margin-right: 10px;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+    }
+
     .carousel-container {
-      width: 50%;
-      position: relative;
+      width: 100%;
       overflow: hidden;
+      height: 50vh;
+      position: relative;
     }
 
     .carousel-images {
       display: flex;
-      width: 100%;
       height: 100%;
       transition: transform 0.5s ease-in-out;
     }
 
     .carousel-images img {
-      width: 100%;
-      height: 100vh;
+      width: 100vw;
+      height: 100%;
       object-fit: cover;
     }
 
     .catalog-container {
-      width: 70%;
       padding: 20px;
-      overflow-y: auto;
     }
 
     .catalog-title {
@@ -78,150 +88,100 @@
       color: #555;
     }
 
-    .auth-buttons {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-    }
-
-    .auth-buttons button {
-      padding: 10px 20px;
-      margin-left: 5px;
+    #content {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Botones de autenticación -->
   <div class="auth-buttons">
-    <button id="login">Iniciar sesión</button>
-    <button id="logout" style="display: none;">Cerrar sesión</button>
+    <button id="btn-login">Iniciar sesión</button>
+    <button id="btn-logout">Cerrar sesión</button>
   </div>
 
-  <div class="carousel-container">
-    <div class="carousel-images" id="carousel">
-      <img src="imagenes/1.jpg" alt="Imagen 1">
-      <img src="imagenes/11.jpg" alt="Imagen 2">
-      <img src="imagenes/111.jpg" alt="Imagen 3">
-      <img src="imagenes/1111.jpg" alt="Imagen 4">
-    </div>
-  </div>
-
-  <div class="catalog-container">
-    <div class="catalog-title">Tienda Online</div>
-
-    <div class="product">
-      <img src="imagenes/5.jpg" alt="Producto 1">
-      <div class="product-info">
-        <h4>Laptop Lenovo IdeaPad Slim 3 15IAN8 | Intel Core i3-N305 | 8GB Ram | 512GB SSD | 15.6" FHD | HDMI | Windows 11 | Plateado</h4>
-        <p>$379.95</p>
+  <div id="content">
+    <div class="carousel-container">
+      <div class="carousel-images" id="carousel">
+        <img src="imagenes/1.jpg" alt="Imagen 1">
+        <img src="imagenes/11.jpg" alt="Imagen 2">
+        <img src="imagenes/111.jpg" alt="Imagen 3">
+        <img src="imagenes/1111.jpg" alt="Imagen 4">
       </div>
     </div>
 
-    <div class="product">
-      <img src="imagenes/6.jpg" alt="Producto 2">
-      <div class="product-info">
-        <h4>Laptop HP 15-fc0026la | AMD Ryzen 7 | 16GB | 512GB | 15.6" FHD | Windows 11 Home | Plateado natural |Incluye: Mochila + Audífono + Mouse + 2 Años de Garantía + ADP</h4>
-        <p>$379.95</p>
-      </div>
-    </div>
+    <div class="catalog-container">
+      <div class="catalog-title">Tienda Online</div>
 
-    <div class="product">
-      <img src="imagenes/7.jpg" alt="Producto 3">
-      <div class="product-info">
-        <h4>MacBook Air Retina 13.6" | M2 | 8GB | 512GB SSD | Gris</h4>
-        <p>$1,299.00</p>
+      <div class="product">
+        <img src="imagenes/5.jpg" alt="Producto 1">
+        <div class="product-info">
+          <h4>Laptop Lenovo IdeaPad Slim 3...</h4>
+          <p>$379.95</p>
+        </div>
       </div>
-    </div>
 
-    <div class="product">
-      <img src="imagenes/8.jpg" alt="Producto 4">
-      <div class="product-info">
-        <h4>Victus Gaming Laptop 15-fb0142la | AMD Ryzen 5 | 16GB | 512GB SSD | NVIDIA GeForce RTX 3050 | 15.6" FHD | Windows 11 Home | Plata mica | 2 Años de Garantía + ADP</h4>
-        <p>$929.95</p>
-      </div>
-    </div>
+      <!-- ... otros productos ... -->
 
-    <div class="product">
-      <img src="imagenes/9.jpg" alt="Producto 5">
-      <div class="product-info">
-        <h4>Laptop Dell Inspiron 15 3530 | Intel Core i7 | 16GB | 1TB SSD | 15.6" Full HD | Windows 11 Home | Plata</h4>
-        <p>$799.95</p>
-      </div>
     </div>
   </div>
 
   <script>
-    const carousel = document.getElementById('carousel');
-    let index = 0;
-
-    setInterval(() => {
-      index++;
-      if (index >= carousel.children.length) {
-        index = 0;
-      }
-      carousel.style.transform = `translateX(-${index * 100}%)`;
-    }, 3000);
-  </script>
-
-  <!-- Script de Auth0 -->
-  <script>
-    let auth0Client = null;
+    let auth0 = null;
 
     const configureClient = async () => {
-      auth0Client = await createAuth0Client({
+      auth0 = await createAuth0Client({
         domain: "dev-s5avvcww00uz4ejm.us.auth0.com",
-        client_id: "jHU75dxckyKxeE3ncW92o6V7ywR6M6pa",
-        authorizationParams: {
-          redirect_uri: window.location.origin
-        }
+        client_id: "jhU75dxckyKxeE3ncW92o6V7ywR6M6pa",
+        cacheLocation: 'localstorage'
       });
+    };
+
+    const updateUI = async () => {
+      const isAuthenticated = await auth0.isAuthenticated();
+
+      document.getElementById("content").style.display = isAuthenticated ? "block" : "none";
     };
 
     window.onload = async () => {
       await configureClient();
 
-      // Manejo de redirección después del login
-      if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/");
+      const query = window.location.search;
+      if (query.includes("code=") && query.includes("state=")) {
+        await auth0.handleRedirectCallback();
+        window.history.replaceState({}, document.title, "/elecpa/");
       }
 
-      const loginButton = document.getElementById("login");
-      const logoutButton = document.getElementById("logout");
+      updateUI();
 
-      const updateUI = async () => {
-        const isAuthenticated = await auth0Client.isAuthenticated();
-        if (isAuthenticated) {
-          loginButton.style.display = "none";
-          logoutButton.style.display = "inline-block";
-
-          const user = await auth0Client.getUser();
-          console.log("Usuario autenticado:", user);
-        } else {
-          loginButton.style.display = "inline-block";
-          logoutButton.style.display = "none";
-        }
-      };
-
-      loginButton.addEventListener("click", () => {
-        auth0Client.loginWithRedirect();
-      });
-
-      logoutButton.addEventListener("click", () => {
-        auth0Client.logout({
-          logoutParams: {
-            returnTo: window.location.origin
+      document.getElementById("btn-login").addEventListener("click", () => {
+        auth0.loginWithRedirect({
+          authorizationParams: {
+            redirect_uri: "https://dobleu-25.github.io/elecpa/"
           }
         });
       });
 
-      await updateUI();
+      document.getElementById("btn-logout").addEventListener("click", () => {
+        auth0.logout({
+          logoutParams: {
+            returnTo: "https://dobleu-25.github.io/elecpa/"
+          }
+        });
+      });
     };
+
+    // Carrusel automático
+    const carousel = document.getElementById('carousel');
+    let index = 0;
+    setInterval(() => {
+      index = (index + 1) % 4;
+      if (carousel) {
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+      }
+    }, 3000);
   </script>
 </body>
 </html>
-
 
 

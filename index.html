@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Romecomputer</title>
+
+  <!-- SDK de Auth0 -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -73,9 +77,27 @@
     .product-info p {
       color: #555;
     }
+
+    .auth-buttons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+    }
+
+    .auth-buttons button {
+      padding: 10px 20px;
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Botones de autenticación -->
+  <div class="auth-buttons">
+    <button id="login">Iniciar sesión</button>
+    <button id="logout" style="display: none;">Cerrar sesión</button>
+  </div>
 
   <div class="carousel-container">
     <div class="carousel-images" id="carousel">
@@ -143,6 +165,61 @@
     }, 3000);
   </script>
 
+  <!-- Script de Auth0 -->
+  <script>
+    let auth0Client = null;
+
+    const configureClient = async () => {
+      auth0Client = await createAuth0Client({
+        domain: "dev-s5avvcww00uz4ejm.us.auth0.com",
+        client_id: "jHU75dxckyKxeE3ncW92o6V7ywR6M6pa",
+        authorizationParams: {
+          redirect_uri: window.location.origin
+        }
+      });
+    };
+
+    window.onload = async () => {
+      await configureClient();
+
+      // Manejo de redirección después del login
+      if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, "/");
+      }
+
+      const loginButton = document.getElementById("login");
+      const logoutButton = document.getElementById("logout");
+
+      const updateUI = async () => {
+        const isAuthenticated = await auth0Client.isAuthenticated();
+        if (isAuthenticated) {
+          loginButton.style.display = "none";
+          logoutButton.style.display = "inline-block";
+
+          const user = await auth0Client.getUser();
+          console.log("Usuario autenticado:", user);
+        } else {
+          loginButton.style.display = "inline-block";
+          logoutButton.style.display = "none";
+        }
+      };
+
+      loginButton.addEventListener("click", () => {
+        auth0Client.loginWithRedirect();
+      });
+
+      logoutButton.addEventListener("click", () => {
+        auth0Client.logout({
+          logoutParams: {
+            returnTo: window.location.origin
+          }
+        });
+      });
+
+      await updateUI();
+    };
+  </script>
 </body>
 </html>
 

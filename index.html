@@ -10,44 +10,44 @@
       padding: 0;
       box-sizing: border-box;
     }
- 
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
       height: 100vh;
       background-color: #f5f5f5;
     }
- 
+
     .carousel-container {
       width: 50%;
       position: relative;
       overflow: hidden;
     }
- 
+
     .carousel-images {
       display: flex;
       width: 100%;
       height: 100%;
       transition: transform 0.5s ease-in-out;
     }
- 
+
     .carousel-images img {
       width: 100%;
       height: 100vh;
       object-fit: cover;
     }
- 
+
     .catalog-container {
       width: 70%;
       padding: 20px;
       overflow-y: auto;
     }
- 
+
     .catalog-title {
       font-size: 2rem;
       margin-bottom: 20px;
     }
- 
+
     .product {
       display: flex;
       align-items: center;
@@ -57,7 +57,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
- 
+
     .product img {
       width: 80px;
       height: 80px;
@@ -65,84 +65,75 @@
       border-radius: 8px;
       margin-right: 15px;
     }
- 
+
     .product-info h4 {
       margin-bottom: 5px;
     }
- 
+
     .product-info p {
       color: #555;
     }
   </style>
 </head>
 <body>
- 
+
   <div class="carousel-container">
     <div class="carousel-images" id="carousel">
-      <img src="https://tse1.mm.bing.net/th?id=OIG3.Tg3qEP15bK0FEB7lpyYI&pid=ImgGn" alt="Imagen 1">
-      <img src="https://th.bing.com/th/id/R.394d42a12a654a01aff55a4ac589de48?rik=8meqYWp%2fRiAmDw&riu=http%3a%2f%2fstore.hp.com%2fUKStore%2fHtml%2fMerch%2fImages%2fc05475056_1750x1285.jpg&ehk=hFHW0bsoA4Vrq9NqTnBn9ZROJe9jXLuXOG2U%2bb2O7Wk%3d&risl=&pid=ImgRaw&r=0" alt="Imagen 2">
-      <img src="https://www.tecnologianueva.com.mx/wp-content/uploads/2023/10/Laptops-2-en-1.jpg" alt="Imagen 3">
+      <img src="imagenes/1.jpg" alt="Imagen 1">
+      <img src="imagenes/11.jpg" alt="Imagen 2">
+      <img src="imagenes/111.jpg" alt="Imagen 3">
+      <img src="imagenes/1111.jpg" alt="Imagen 4">
     </div>
   </div>
- 
+
   <div class="catalog-container">
     <div class="catalog-title">Tienda Online</div>
- 
+
     <div class="product">
-      <img src="https://www.panafoto.com/media/catalog/product/cache/204d707505d46dda5e20bdb1f93a071b/1/5/153696-001.jpg" alt="Producto 1">
+      <img src="imagenes/5.jpg" alt="Producto 1">
       <div class="product-info">
         <h4>Laptop Lenovo IdeaPad Slim 3 15IAN8 | Intel Core i3-N305 | 8GB Ram | 512GB SSD | 15.6" FHD | HDMI | Windows 11 | Plateado</h4>
         <p>$379.95</p>
       </div>
     </div>
- 
+
     <div class="product">
-      <img src="https://www.panafoto.com/media/catalog/product/cache/204d707505d46dda5e20bdb1f93a071b/1/5/151171-001.jpg" alt="Producto 2">
+      <img src="imagenes/6.jpg" alt="Producto 2">
       <div class="product-info">
         <h4>Laptop HP 15-fc0026la | AMD Ryzen 7 | 16GB | 512GB | 15.6" FHD | Windows 11 Home | Plateado natural |Incluye: Mochila + Audífono + Mouse + 2 Años de Garantía + ADP</h4>
         <p>$379.95</p>
       </div>
     </div>
- 
+
     <div class="product">
-      <img src="https://www.panafoto.com/media/catalog/product/cache/204d707505d46dda5e20bdb1f93a071b/1/4/149132-001.png" alt="Producto 3">
+      <img src="imagenes/7.jpg" alt="Producto 3">
       <div class="product-info">
         <h4>MacBook Air Retina 13.6" | M2 | 8GB | 512GB SSD | Gris</h4>
         <p>$1,299.00</p>
       </div>
     </div>
- 
+
     <div class="product">
-      <img src="https://www.panafoto.com/media/catalog/product/cache/d9d0e56184dc11f5b1bf90662cef36b8/1/5/152535-008.jpg" alt="Producto 3">
+      <img src="imagenes/8.jpg" alt="Producto 4">
       <div class="product-info">
         <h4>Victus Gaming Laptop 15-fb0142la | AMD Ryzen 5 | 16GB | 512GB SSD | NVIDIA GeForce RTX 3050 | 15.6" FHD | Windows 11 Home | Plata mica | 2 Años de Garantía + ADP</h4>
         <p>$929.95</p>
       </div>
     </div>
- 
+
     <div class="product">
-      <img src="https://www.panafoto.com/media/catalog/product/cache/d9d0e56184dc11f5b1bf90662cef36b8/1/5/152532-001.jpg" alt="Producto 3">
+      <img src="imagenes/9.jpg" alt="Producto 5">
       <div class="product-info">
         <h4>Laptop Dell Inspiron 15 3530 | Intel Core i7 | 16GB | 1TB SSD | 15.6" Full HD | Windows 11 Home | Plata</h4>
         <p>$799.95</p>
       </div>
     </div>
- 
-    <div class="product">
-      <img src="" alt="Producto 3">
-      <div class="product-info">
-        <h4></h4>
-        <p>$</p>
-      </div>
-    </div>
- 
-    <!-- Agrega más productos aquí -->
   </div>
- 
+
   <script>
     const carousel = document.getElementById('carousel');
     let index = 0;
- 
+
     setInterval(() => {
       index++;
       if (index >= carousel.children.length) {
@@ -151,7 +142,7 @@
       carousel.style.transform = `translateX(-${index * 100}%)`;
     }, 3000);
   </script>
- 
+
 </body>
 </html>
 

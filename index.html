@@ -6,30 +6,16 @@
   <title>Romecomputer</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      text-align: center;
       background-color: #f5f5f5;
-    }
-
-    .carousel-container {
-      width: 50%;
-      position: relative;
+      padding: 20px;
     }
 
     button {
-      margin-bottom: 20px;
       padding: 10px 20px;
+      margin: 15px;
       font-size: 16px;
       background-color: #4CAF50;
       color: white;
@@ -43,45 +29,46 @@
     }
   </style>
 
-  <!-- Netlify Identity Widget -->
+  <!-- Netlify Identity Script -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
-  <!-- Botón de login/registro -->
-  <button id="login-button">Iniciar sesión / Registrarse</button>
+  <h1>Bienvenido a Romecomputer</h1>
 
-  <!-- Aquí puedes agregar tu carrusel o contenido -->
-  <div class="carousel-container">
-    <!-- Tu carrusel va aquí -->
-  </div>
+  <!-- Botón para abrir login/registro -->
+  <button onclick="netlifyIdentity.open()">Iniciar sesión / Registrarse</button>
 
-  <!-- Script de Netlify Identity -->
+  <!-- Mostrar usuario actual -->
+  <p id="user-status"></p>
+
   <script>
-    // Inicializar el widget
-    netlifyIdentity.init();
-
-    // Asignar evento al botón
-    document.getElementById('login-button').addEventListener('click', () => {
-      netlifyIdentity.open();
-    });
-
-    // Eventos de inicio/cierre de sesión
+    // Inicializa Netlify Identity
     netlifyIdentity.on("init", user => {
-      console.log("Usuario actual:", user);
+      const status = document.getElementById("user-status");
+      if (user) {
+        status.textContent = `Sesión iniciada como: ${user.email}`;
+      } else {
+        status.textContent = "No has iniciado sesión.";
+      }
     });
 
+    // Evento al iniciar sesión
     netlifyIdentity.on("login", user => {
-      console.log("Inicio de sesión exitoso", user);
-      netlifyIdentity.close();
+      alert("Sesión iniciada correctamente");
       window.location.reload();
     });
 
+    // Evento al cerrar sesión
     netlifyIdentity.on("logout", () => {
-      console.log("Cierre de sesión");
+      alert("Sesión cerrada");
       window.location.reload();
     });
+
+    // Inicia el widget
+    netlifyIdentity.init();
   </script>
 
 </body>
 </html>
+

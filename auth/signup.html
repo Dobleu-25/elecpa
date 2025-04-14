@@ -1,1 +1,30 @@
-CXCX
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+</head>
+<body>
+  <h1>Crear cuenta</h1>
+  <form id="signup-form">
+    <label for="signup-email">Correo electrónico:</label>
+    <input type="email" id="signup-email" required>
+
+    <label for="signup-password">Contraseña:</label>
+    <input type="password" id="signup-password" required>
+
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <!-- Mensaje de feedback -->
+  <p id="signup-message"></p>
+
+  <!-- Script de Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- Enlace a tu script personalizado -->
+  <script src="/js/signup.js"></script>
+</body>
+</html>
+

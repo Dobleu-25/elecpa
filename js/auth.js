@@ -1,27 +1,33 @@
-document.getElementById('login-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+// js/auth.js
 
-  const response = await fetch('/.netlify/identity/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      grant_type: 'password',
-      username: email,
-      password: password
-    })
+// Inicializar el widget de Netlify Identity
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on("init", (user) => {
+    if (!user) {
+      const loginForm = document.getElementById("login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          // Intentar login con Netlify Identity
+          window.netlifyIdentity.login(email, password, true).then((user) => {
+            document.getElementById("message").textContent =
+              "Inicio de sesión exitoso";
+            // Redireccionar si quieres:
+            // window.location.href = "/";
+          }).catch((err) => {
+            console.error("Login failed:", err);
+            document.getElementById("message").textContent =
+              "Error en las credenciales";
+          });
+        });
+      }
+    }
   });
 
-  const result = await response.json();
+  window.netlifyIdentity.init();
+}
 
-  if (result.access_token) {
-    document.getElementById('message').textContent = 'Inicio de sesión exitoso';
-    // Redireccionar si quieres:
-    // window.location.href = "/";
-  } else {
-    document.getElementById('message').textContent = 'Error en las credenciales';
-  }
-});

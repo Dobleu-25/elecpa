@@ -49,21 +49,31 @@
 <body>
 
   <!-- Botón de login/registro -->
-  <button onclick="netlifyIdentity.open()">Iniciar sesión / Registrarse</button>
+  <button id="login-button">Iniciar sesión / Registrarse</button>
 
   <!-- Aquí puedes agregar tu carrusel o contenido -->
   <div class="carousel-container">
     <!-- Tu carrusel va aquí -->
   </div>
 
-  <!-- Inicializar Netlify Identity -->
+  <!-- Script de Netlify Identity -->
   <script>
+    // Inicializar el widget
+    netlifyIdentity.init();
+
+    // Asignar evento al botón
+    document.getElementById('login-button').addEventListener('click', () => {
+      netlifyIdentity.open();
+    });
+
+    // Eventos de inicio/cierre de sesión
     netlifyIdentity.on("init", user => {
       console.log("Usuario actual:", user);
     });
 
     netlifyIdentity.on("login", user => {
       console.log("Inicio de sesión exitoso", user);
+      netlifyIdentity.close();
       window.location.reload();
     });
 
@@ -71,8 +81,6 @@
       console.log("Cierre de sesión");
       window.location.reload();
     });
-
-    netlifyIdentity.init();
   </script>
 
 </body>

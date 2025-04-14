@@ -1,0 +1,7 @@
+netlifyIdentity.on("login", user => {
+  if (user.app_metadata.roles.includes("admin")) {
+    alert("Eres administrador");
+  } else {
+    alert("Eres usuario normal");
+  }
+});

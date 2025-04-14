@@ -1,7 +1,16 @@
-netlifyIdentity.on("login", user => {
-  if (user.app_metadata.roles.includes("admin")) {
-    alert("Eres administrador");
-  } else {
-    alert("Eres usuario normal");
-  }
-});
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Elecpa</title>
+</head>
+<body>
+  <h2>Iniciar sesión</h2>
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Correo" required><br>
+    <input type="password" id="password" placeholder="Contraseña" required><br>
+    <button type="submit">Ingresar</button>
+  </form>
+  <p id="message"></p>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

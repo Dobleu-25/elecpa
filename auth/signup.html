@@ -17,27 +17,26 @@
     <button type="submit">Registrarse</button>
   </form>
 
-  <!-- Mensaje de feedback -->
   <p id="signup-message"></p>
 
-  <!-- Script de Netlify Identity -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Validación de contraseña -->
+  <!-- Script de validación de contraseña -->
   <script>
-    const form = document.getElementById("signup-form");
-    const password = document.getElementById("signup-password");
+    const form = document.querySelector("#signup-form");
+    const password = document.querySelector("#signup-password");
 
     form.addEventListener("submit", function(event) {
       if (password.value.length < 8) {
-        event.preventDefault(); // evita que se envíe
+        event.preventDefault(); // Detiene el envío del formulario
         alert("La contraseña debe tener al menos 8 caracteres.");
       }
     });
   </script>
 
-  <!-- Enlace a tu script personalizado (opcional, si tienes lógica extra) -->
-  <script src="/js/signup.js"></script>
+  <!-- Script de Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- Enlace opcional a tu script personalizado (si tienes lógica adicional) -->
+  <!-- <script src="/js/signup.js"></script> -->
 </body>
 </html>
 

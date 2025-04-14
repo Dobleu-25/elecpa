@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Romecomputer</title>
+
   <style>
     * {
       margin: 0;
@@ -14,6 +15,9 @@
     body {
       font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       height: 100vh;
       background-color: #f5f5f5;
     }
@@ -21,126 +25,54 @@
     .carousel-container {
       width: 50%;
       position: relative;
-      overflow: hidden;
     }
 
-    .carousel-images {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .carousel-images img {
-      width: 100%;
-      height: 100vh;
-      object-fit: cover;
-    }
-
-    .catalog-container {
-      width: 70%;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .catalog-title {
-      font-size: 2rem;
+    button {
       margin-bottom: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    .product {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .product img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-right: 15px;
-    }
-
-    .product-info h4 {
-      margin-bottom: 5px;
-    }
-
-    .product-info p {
-      color: #555;
+    button:hover {
+      background-color: #45a049;
     }
   </style>
+
+  <!-- Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
+  <!-- Botón de login/registro -->
+  <button onclick="netlifyIdentity.open()">Iniciar sesión / Registrarse</button>
+
+  <!-- Aquí puedes agregar tu carrusel o contenido -->
   <div class="carousel-container">
-    <div class="carousel-images" id="carousel">
-      <img src="imagenes/1.jpg" alt="Imagen 1">
-      <img src="imagenes/11.jpg" alt="Imagen 2">
-      <img src="imagenes/111.jpg" alt="Imagen 3">
-      <img src="imagenes/1111.jpg" alt="Imagen 4">
-    </div>
+    <!-- Tu carrusel va aquí -->
   </div>
 
-  <div class="catalog-container">
-    <div class="catalog-title">Tienda Online</div>
-
-    <div class="product">
-      <img src="imagenes/5.jpg" alt="Producto 1">
-      <div class="product-info">
-        <h4>Laptop Lenovo IdeaPad Slim 3 15IAN8 | Intel Core i3-N305 | 8GB Ram | 512GB SSD | 15.6" FHD | HDMI | Windows 11 | Plateado</h4>
-        <p>$379.95</p>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="imagenes/6.jpg" alt="Producto 2">
-      <div class="product-info">
-        <h4>Laptop HP 15-fc0026la | AMD Ryzen 7 | 16GB | 512GB | 15.6" FHD | Windows 11 Home | Plateado natural | Incluye: Mochila + Audífono + Mouse + 2 Años de Garantía + ADP</h4>
-        <p>$379.95</p>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="imagenes/7.jpg" alt="Producto 3">
-      <div class="product-info">
-        <h4>MacBook Air Retina 13.6" | M2 | 8GB | 512GB SSD | Gris</h4>
-        <p>$1,299.00</p>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="imagenes/8.jpg" alt="Producto 4">
-      <div class="product-info">
-        <h4>Victus Gaming Laptop 15-fb0142la | AMD Ryzen 5 | 16GB | 512GB SSD | NVIDIA GeForce RTX 3050 | 15.6" FHD | Windows 11 Home | Plata mica | 2 Años de Garantía + ADP</h4>
-        <p>$929.95</p>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="imagenes/9.jpg" alt="Producto 5">
-      <div class="product-info">
-        <h4>Laptop Dell Inspiron 15 3530 | Intel Core i7 | 16GB | 1TB SSD | 15.6" Full HD | Windows 11 Home | Plata</h4>
-        <p>$799.95</p>
-      </div>
-    </div>
-  </div>
-
+  <!-- Inicializar Netlify Identity -->
   <script>
-    const carousel = document.getElementById('carousel');
-    let index = 0;
+    netlifyIdentity.on("init", user => {
+      console.log("Usuario actual:", user);
+    });
 
-    setInterval(() => {
-      index++;
-      if (index >= carousel.children.length) {
-        index = 0;
-      }
-      carousel.style.transform = `translateX(-${index * 100}%)`;
-    }, 3000);
+    netlifyIdentity.on("login", user => {
+      console.log("Inicio de sesión exitoso", user);
+      window.location.reload();
+    });
+
+    netlifyIdentity.on("logout", () => {
+      console.log("Cierre de sesión");
+      window.location.reload();
+    });
+
+    netlifyIdentity.init();
   </script>
 
 </body>

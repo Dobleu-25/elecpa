@@ -49,10 +49,9 @@
   <h1>Bienvenido a Romecomputer</h1>
 
   <button onclick="netlifyIdentity.open()">Login con Widget</button>
-
   <p id="user-status"></p>
 
-  <!-- Formulario personalizado de registro -->
+  <!-- Formulario de registro -->
   <form id="signup-form">
     <h2>Registro personalizado</h2>
     <input type="email" id="email" placeholder="Correo electrónico" required /><br />
@@ -60,33 +59,41 @@
     <button type="button" id="signup-button">Registrarse</button>
   </form>
 
+  <!-- Contenido protegido -->
+  <div id="protected-content" style="display: none;">
+    <h2>Contenido privado</h2>
+    <p>¡Bienvenido a tu panel seguro, solo accesible si estás autenticado!</p>
+    <button onclick="netlifyIdentity.logout()">Cerrar sesión</button>
+  </div>
+
+  <!-- Panel para ADMIN -->
+  <div id="admin-panel" style="display: none; margin-top: 20px; background-color: #fff0f0; padding: 20px; border-radius: 10px;">
+    <h2>Panel de Administración</h2>
+    <p>Solo los usuarios con rol <strong>admin</strong> pueden ver este contenido.</p>
+    <button onclick="alert('Acción de administrador')">Ejecutar acción admin</button>
+  </div>
+
   <script>
     // Inicializa Netlify Identity
     netlifyIdentity.on("init", user => {
-      const status = document.getElementById("user-status");
-      if (user) {
-        status.textContent = `Sesión iniciada como: ${user.email}`;
-      } else {
-        status.textContent = "No has iniciado sesión.";
-      }
+      handleSession(user);
     });
 
     netlifyIdentity.on("login", user => {
       alert("Sesión iniciada correctamente");
-      window.location.reload();
+      handleSession(user);
     });
 
     netlifyIdentity.on("logout", () => {
       alert("Sesión cerrada");
-      window.location.reload();
+      handleSession(null);
     });
 
     netlifyIdentity.init();
 
-    // Lista corta de contraseñas comunes (puedes ampliarla)
+    // Lista corta de contraseñas comunes
     const commonPasswords = ["12345678901234", "password123456", "qwertyuiop1234", "abc123abc12345"];
 
-    // Validación de contraseña fuerte
     function isPasswordStrong(password) {
       const hasUpper = /[A-Z]/.test(password);
       const hasLower = /[a-z]/.test(password);
@@ -123,6 +130,34 @@
         .then(() => alert("Registro exitoso. Revisa tu correo si es necesario."))
         .catch(err => alert("Error en el registro: " + err.message));
     });
+
+    // Manejo de sesión y contenido dinámico
+    function handleSession(user) {
+      const status = document.getElementById("user-status");
+      const content = document.getElementById("protected-content");
+      const adminPanel = document.getElementById("admin-panel");
+      const form = document.getElementById("signup-form");
+
+      if (user) {
+        status.textContent = `Sesión iniciada como: ${user.email}`;
+        content.style.display = "block";
+        form.style.display = "none";
+
+        // Verificar si tiene rol "admin"
+        const roles = user.app_metadata && user.app_metadata.roles;
+        if (roles && roles.includes("admin")) {
+          adminPanel.style.display = "block";
+        } else {
+          adminPanel.style.display = "none";
+        }
+
+      } else {
+        status.textContent = "No has iniciado sesión.";
+        content.style.display = "none";
+        adminPanel.style.display = "none";
+        form.style.display = "block";
+      }
+    }
   </script>
 
   <!-- GoatCounter tracking (simulación de IDS/IPs) -->
@@ -130,3 +165,4 @@
           async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
+

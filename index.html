@@ -27,6 +27,18 @@
     button:hover {
       background-color: #45a049;
     }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    form {
+      margin-top: 30px;
+    }
   </style>
 
   <!-- Netlify Identity Script -->
@@ -36,11 +48,17 @@
 
   <h1>Bienvenido a Romecomputer</h1>
 
-  <!-- Botón para abrir login/registro -->
-  <button onclick="netlifyIdentity.open()">Iniciar sesión / Registrarse</button>
+  <button onclick="netlifyIdentity.open()">Login con Widget</button>
 
-  <!-- Mostrar usuario actual -->
   <p id="user-status"></p>
+
+  <!-- Formulario personalizado de registro -->
+  <form id="signup-form">
+    <h2>Registro personalizado</h2>
+    <input type="email" id="email" placeholder="Correo electrónico" required /><br />
+    <input type="password" id="password" placeholder="Contraseña segura" required /><br />
+    <button type="button" id="signup-button">Registrarse</button>
+  </form>
 
   <script>
     // Inicializa Netlify Identity
@@ -53,29 +71,61 @@
       }
     });
 
-    // Evento al iniciar sesión
     netlifyIdentity.on("login", user => {
       alert("Sesión iniciada correctamente");
       window.location.reload();
     });
 
-    // Evento al cerrar sesión
     netlifyIdentity.on("logout", () => {
       alert("Sesión cerrada");
       window.location.reload();
     });
 
-    // Inicia el widget
     netlifyIdentity.init();
+
+    // Lista corta de contraseñas comunes (puedes ampliarla)
+    const commonPasswords = ["12345678901234", "password123456", "qwertyuiop1234", "abc123abc12345"];
+
+    // Validación de contraseña fuerte
+    function isPasswordStrong(password) {
+      const hasUpper = /[A-Z]/.test(password);
+      const hasLower = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSymbol = /[^A-Za-z0-9]/.test(password);
+      const isCommon = commonPasswords.includes(password);
+
+      if (password.length !== 14) {
+        alert("La contraseña debe tener exactamente 14 caracteres.");
+        return false;
+      }
+
+      if (isCommon) {
+        alert("La contraseña es demasiado común. Por favor elige una más segura.");
+        return false;
+      }
+
+      if (!hasUpper || !hasLower || !hasNumber || !hasSymbol) {
+        alert("La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo.");
+        return false;
+      }
+
+      return true;
+    }
+
+    // Registro personalizado con validación
+    document.getElementById("signup-button").addEventListener("click", function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!isPasswordStrong(password)) return;
+
+      netlifyIdentity.signup({ email, password })
+        .then(() => alert("Registro exitoso. Revisa tu correo si es necesario."))
+        .catch(err => alert("Error en el registro: " + err.message));
+    });
   </script>
 
   <!-- GoatCounter tracking (simulación de IDS/IPs) -->
-  <script data-goatcounter="https://romecomp.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
-</body>
-</html>
-
-  <!-- GoatCounter tracking -->
   <script data-goatcounter="https://romecomp.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
